@@ -1,0 +1,14 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/brandonmorris/Documents/University of Washington /CSS/Fundamentals of Programming Languages/Programming_Assignment_1/main.c
+stdio.h
+-
+stdlib.h
+-
+
