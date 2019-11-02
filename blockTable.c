@@ -3,26 +3,7 @@
 //
 #include "blockTable.h"
 #include <stdlib.h>
-
-/**
- * Definition of the Block type. Holds information about particular sections of system memory
- * and is used by the BlockTable.
- */
-struct block {
-    int size;
-    int used;
-    int fragmented;
-    int inUse;
-};
-
-/**
- * Definition of the BlockTable type. Used to store individual Block objects.
- */
-struct blockTable {
-    int blockSize;
-    int length;
-    Block *table;
-};
+#include <stdio.h>
 
 /**
  * Creates a new Block object.
@@ -112,8 +93,8 @@ BlockTable createBlockTable(int blockSize, int length) {
  *
  * @param table The BlockTable object to be destroyed.
  */
-void destroyBlockTable(BlockTable table) {
-    free(table.table);
+void destroyBlockTable(BlockTable* bTable) {
+    free(bTable->table);
 }
 
 
@@ -124,8 +105,8 @@ void destroyBlockTable(BlockTable table) {
  * @param index The index of the Block to be updated.
  * @param sizeUsed The new amount of space the Block will now be using.
  */
-void updateTable(BlockTable bTable, int index, int sizeUsed) {
-    Block block = *(bTable.table + (sizeof(Block) * index));
+void updateTable(BlockTable* bTable, int index, int sizeUsed) {
+    Block block = *(bTable->table + (sizeof(Block) * index));
     updateBlock(block, sizeUsed);
 
 }
@@ -136,11 +117,27 @@ void updateTable(BlockTable bTable, int index, int sizeUsed) {
  *
  * @param bTable The BlockTable to have it's contents reset.
  */
-void clearTable(BlockTable bTable) {
+void clearTable(BlockTable* bTable) {
     int i;
     // Reset the Block at every index of the BlockTable provided.
-    for (i = 0; i < bTable.length; i++) {
-        resetBlock(*(bTable.table + (sizeof(Block) * i)));
+    for (i = 0; i < bTable->length; i++) {
+        resetBlock(*(bTable->table + (sizeof(Block) * i)));
     }
 
+}
+
+
+/**
+ * Prints the contents of the BlockTable to console.
+ *
+ * @param bTable The BlockTable to be printed.
+ */
+void printTable(BlockTable* bTable) {
+    int i;
+    printf("Block table:");
+    printf("Block number\t\t\tSize used\t\t\tFragmented");
+    for (i = 0; i < bTable->length; i++) {
+        Block b = *(bTable->table + (sizeof(Block) * i));
+        printf("%d\t\t\t%d\t\t\t%d\t\t\t%d", i, b.used, b.fragmented);
+    }
 }

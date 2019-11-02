@@ -6,9 +6,17 @@
 
 #IncludeRegexTransform: 
 
-/Users/brandonmorris/Documents/University of Washington /CSS/Fundamentals of Programming Languages/Programming_Assignment_1/main.c
+/Users/brandonmorris/Documents/University of Washington /CSS/Fundamentals of Programming Languages/Programming_Assignment_1/blockTable.h
+
+/Users/brandonmorris/Documents/University of Washington /CSS/Fundamentals of Programming Languages/Programming_Assignment_1/directory.h
+
+/Users/brandonmorris/Documents/University of Washington /CSS/Fundamentals of Programming Languages/Programming_Assignment_1/driver.c
 stdio.h
 -
 stdlib.h
 -
+directory.h
+/Users/brandonmorris/Documents/University of Washington /CSS/Fundamentals of Programming Languages/Programming_Assignment_1/directory.h
+blockTable.h
+/Users/brandonmorris/Documents/University of Washington /CSS/Fundamentals of Programming Languages/Programming_Assignment_1/blockTable.h
 

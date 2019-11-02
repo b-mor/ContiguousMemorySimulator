@@ -1,5 +1,5 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/Programming_Assignment_1.dir/main.c.o"
+  "CMakeFiles/Programming_Assignment_1.dir/driver.c.o"
   "CMakeFiles/Programming_Assignment_1.dir/blockTable.c.o"
   "CMakeFiles/Programming_Assignment_1.dir/directory.c.o"
   "Programming_Assignment_1.pdb"

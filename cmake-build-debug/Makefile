@@ -177,32 +177,32 @@ directory.c.s:
 	$(MAKE) -f CMakeFiles/Programming_Assignment_1.dir/build.make CMakeFiles/Programming_Assignment_1.dir/directory.c.s
 .PHONY : directory.c.s
 
-main.o: main.c.o
+driver.o: driver.c.o
 
-.PHONY : main.o
+.PHONY : driver.o
 
 # target to build an object file
-main.c.o:
-	$(MAKE) -f CMakeFiles/Programming_Assignment_1.dir/build.make CMakeFiles/Programming_Assignment_1.dir/main.c.o
-.PHONY : main.c.o
+driver.c.o:
+	$(MAKE) -f CMakeFiles/Programming_Assignment_1.dir/build.make CMakeFiles/Programming_Assignment_1.dir/driver.c.o
+.PHONY : driver.c.o
 
-main.i: main.c.i
+driver.i: driver.c.i
 
-.PHONY : main.i
+.PHONY : driver.i
 
 # target to preprocess a source file
-main.c.i:
-	$(MAKE) -f CMakeFiles/Programming_Assignment_1.dir/build.make CMakeFiles/Programming_Assignment_1.dir/main.c.i
-.PHONY : main.c.i
+driver.c.i:
+	$(MAKE) -f CMakeFiles/Programming_Assignment_1.dir/build.make CMakeFiles/Programming_Assignment_1.dir/driver.c.i
+.PHONY : driver.c.i
 
-main.s: main.c.s
+driver.s: driver.c.s
 
-.PHONY : main.s
+.PHONY : driver.s
 
 # target to generate assembly for a file
-main.c.s:
-	$(MAKE) -f CMakeFiles/Programming_Assignment_1.dir/build.make CMakeFiles/Programming_Assignment_1.dir/main.c.s
-.PHONY : main.c.s
+driver.c.s:
+	$(MAKE) -f CMakeFiles/Programming_Assignment_1.dir/build.make CMakeFiles/Programming_Assignment_1.dir/driver.c.s
+.PHONY : driver.c.s
 
 # Help Target
 help:
@@ -219,9 +219,9 @@ help:
 	@echo "... directory.o"
 	@echo "... directory.i"
 	@echo "... directory.s"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
+	@echo "... driver.o"
+	@echo "... driver.i"
+	@echo "... driver.s"
 .PHONY : help
 
 

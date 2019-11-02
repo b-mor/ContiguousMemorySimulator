@@ -7,19 +7,6 @@
 #include <stdio.h>
 #include <string.h>
 
-struct directory {
-    int length;
-    int size;
-    Entry* list;
-};
-
-struct directory_entry {
-    char* fileName;
-    int size;
-    int start;
-    int length;
-};
-
 
 /**
  * Creates a new Directory object with space for 'length' number of Entry objects.
@@ -43,8 +30,8 @@ Directory createDirectory(int length) {
  *
  * @param d The directory to have it's memory freed.
  */
-void destroyDirectory(Directory d) {
-    free(d.list);
+void destroyDirectory(Directory* d) {
+    free(d->list);
 }
 
 
@@ -54,12 +41,12 @@ void destroyDirectory(Directory d) {
  * @param d The Directory to Entry will be added to.
  * @param e The Entry object to be added.
  */
-void addToDirectory(Directory d, Entry e) {
-    if (d.size == d.length) {
+void addToDirectory(Directory* d, Entry e) {
+    if (d->size == d->length) {
         printf("Not enough space to add a new entry.");
     } else {
-        *(d.list + (sizeof(Entry) * d.size)) = e;
-        d.size++;
+        *(d->list + (sizeof(Entry) * d->size)) = e;
+        d->size++;
     }
 }
 
@@ -71,14 +58,14 @@ void addToDirectory(Directory d, Entry e) {
  * @param d
  * @param index
  */
-void deleteFromDirectory(Directory d, int index) {
+void deleteFromDirectory(Directory* d, int index) {
     int i, copyFlag, entrySize;
     copyFlag = 0;
     entrySize = sizeof(Entry);
-    for (i = 0; i < d.length; i++) {
+    for (i = 0; i < d->length; i++) {
         // If the copyFlag is true, shift the next Entry size chunk of memory down.
         if (copyFlag == 1) {
-            memcpy((d.list + (entrySize * i)), (d.list + (entrySize * (i + 1))), entrySize);
+            memcpy((d->list + (entrySize * i)), (d->list + (entrySize * (i + 1))), entrySize);
         }
         // If the next iteration will be the index we want to delete at, set the copy flag True.
         else if (i + 1 == index) {
@@ -87,7 +74,18 @@ void deleteFromDirectory(Directory d, int index) {
     }
 
     // Deletion is done, update the Directory size.
-    d.size--;
+    d->size--;
+}
+
+
+void printDirectory(Directory* d) {
+    int i;
+    printf("Directory table:\n");
+    printf("Filename\t\t\t\t\t\tSize\t\tStart\t\tLength\n");
+    for (i = 0; i < d->size; i++) {
+        Entry e = *(d->list + (sizeof(Entry) * i));
+        printf("%s\t\t\t\t\t\t%d\t\t\t%d\t\t\t%d\n", e.fileName, e.size, e.start, e.length);
+    }
 }
 
 

@@ -3,4 +3,4 @@ project(Programming_Assignment_1 C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(Programming_Assignment_1 main.c blockTable.h blockTable.c directory.h directory.c)
+add_executable(Programming_Assignment_1 driver.c blockTable.h blockTable.c directory.h directory.c)

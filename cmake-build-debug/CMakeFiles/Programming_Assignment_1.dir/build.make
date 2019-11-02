@@ -57,18 +57,18 @@ include CMakeFiles/Programming_Assignment_1.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/Programming_Assignment_1.dir/flags.make
 
-CMakeFiles/Programming_Assignment_1.dir/main.c.o: CMakeFiles/Programming_Assignment_1.dir/flags.make
-CMakeFiles/Programming_Assignment_1.dir/main.c.o: ../main.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/brandonmorris/Documents/University of Washington /CSS/Fundamentals of Programming Languages/Programming_Assignment_1/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/Programming_Assignment_1.dir/main.c.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/Programming_Assignment_1.dir/main.c.o   -c "/Users/brandonmorris/Documents/University of Washington /CSS/Fundamentals of Programming Languages/Programming_Assignment_1/main.c"
+CMakeFiles/Programming_Assignment_1.dir/driver.c.o: CMakeFiles/Programming_Assignment_1.dir/flags.make
+CMakeFiles/Programming_Assignment_1.dir/driver.c.o: ../driver.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/brandonmorris/Documents/University of Washington /CSS/Fundamentals of Programming Languages/Programming_Assignment_1/cmake-build-debug/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/Programming_Assignment_1.dir/driver.c.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/Programming_Assignment_1.dir/driver.c.o   -c "/Users/brandonmorris/Documents/University of Washington /CSS/Fundamentals of Programming Languages/Programming_Assignment_1/driver.c"
 
-CMakeFiles/Programming_Assignment_1.dir/main.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/Programming_Assignment_1.dir/main.c.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E "/Users/brandonmorris/Documents/University of Washington /CSS/Fundamentals of Programming Languages/Programming_Assignment_1/main.c" > CMakeFiles/Programming_Assignment_1.dir/main.c.i
+CMakeFiles/Programming_Assignment_1.dir/driver.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/Programming_Assignment_1.dir/driver.c.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E "/Users/brandonmorris/Documents/University of Washington /CSS/Fundamentals of Programming Languages/Programming_Assignment_1/driver.c" > CMakeFiles/Programming_Assignment_1.dir/driver.c.i
 
-CMakeFiles/Programming_Assignment_1.dir/main.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/Programming_Assignment_1.dir/main.c.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S "/Users/brandonmorris/Documents/University of Washington /CSS/Fundamentals of Programming Languages/Programming_Assignment_1/main.c" -o CMakeFiles/Programming_Assignment_1.dir/main.c.s
+CMakeFiles/Programming_Assignment_1.dir/driver.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/Programming_Assignment_1.dir/driver.c.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S "/Users/brandonmorris/Documents/University of Washington /CSS/Fundamentals of Programming Languages/Programming_Assignment_1/driver.c" -o CMakeFiles/Programming_Assignment_1.dir/driver.c.s
 
 CMakeFiles/Programming_Assignment_1.dir/blockTable.c.o: CMakeFiles/Programming_Assignment_1.dir/flags.make
 CMakeFiles/Programming_Assignment_1.dir/blockTable.c.o: ../blockTable.c
@@ -98,14 +98,14 @@ CMakeFiles/Programming_Assignment_1.dir/directory.c.s: cmake_force
 
 # Object files for target Programming_Assignment_1
 Programming_Assignment_1_OBJECTS = \
-"CMakeFiles/Programming_Assignment_1.dir/main.c.o" \
+"CMakeFiles/Programming_Assignment_1.dir/driver.c.o" \
 "CMakeFiles/Programming_Assignment_1.dir/blockTable.c.o" \
 "CMakeFiles/Programming_Assignment_1.dir/directory.c.o"
 
 # External object files for target Programming_Assignment_1
 Programming_Assignment_1_EXTERNAL_OBJECTS =
 
-Programming_Assignment_1: CMakeFiles/Programming_Assignment_1.dir/main.c.o
+Programming_Assignment_1: CMakeFiles/Programming_Assignment_1.dir/driver.c.o
 Programming_Assignment_1: CMakeFiles/Programming_Assignment_1.dir/blockTable.c.o
 Programming_Assignment_1: CMakeFiles/Programming_Assignment_1.dir/directory.c.o
 Programming_Assignment_1: CMakeFiles/Programming_Assignment_1.dir/build.make
