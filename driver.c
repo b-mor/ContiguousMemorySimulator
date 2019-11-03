@@ -4,25 +4,27 @@
 #include "blockTable.h"
 
 void startUp(long *sizePointer, long *blockPointer);
-void getInput();
+void getInput(BlockTable* table, Directory* directory);
 void addFile(BlockTable* table, Directory* directory);
 int checkForSpace(BlockTable* bTable, int fileSize);
 
 int main() {
 
-    Directory d = createDirectory(5);
-    Entry e1 = createEntry("test.txt", 100, 100, 0);
-    Entry e2 = createEntry("test.txt", 200, 200, 0);
-    Entry e3 = createEntry("test.txt", 300, 300, 0);
+    long* systemSizePtr = malloc(sizeof(long));
+    long* blockSizePtr = malloc(sizeof(long));
+    *systemSizePtr = 0;
+    *blockSizePtr = 0;
+    startUp(systemSizePtr, blockSizePtr);  // Get size values for the system from the user.
 
-    addToDirectory(&d, e1);
-    addToDirectory(&d, e2);
-    addToDirectory(&d, e3);
-    printDirectory(&d);
-    deleteFromDirectory(&d, 1);
-    printDirectory(&d);
+    BlockTable sysTable = createBlockTable(*blockSizePtr, (*systemSizePtr / *blockSizePtr));
+    Directory sysDirectory = createDirectory(*systemSizePtr / *blockSizePtr);
 
-    destroyDirectory(&d);
+    // Loop until the user enters the command to stop. Terminates the program inside the function.
+    int loopFlag = 1;
+    while (loopFlag > 0) {
+        getInput(&sysTable, &sysDirectory);
+    }
+
     return 0;
 }
 
@@ -34,7 +36,7 @@ int main() {
  * @param blockPointer Reference to the size of individual blocks in memory as given by the user.
  */
 void startUp(long *sizePointer, long *blockPointer) {
-    char sizeInput[20];
+    char sizeInput[32];
     char *endPointer;
     *sizePointer = 0;
 
@@ -49,22 +51,29 @@ void startUp(long *sizePointer, long *blockPointer) {
     }
 
     // Input validation for the size of each blockTable in system memory.
-    char blockInput[20];
-    *sizePointer = 0;
     while (*blockPointer == 0 || *blockPointer < 0) {
-        printf("Enter the size of each blockTable: ");
+        char* blockInput = malloc(sizeof(char) * 32);
+        *blockPointer = 0;
+        printf("Enter the size of each block: ");
         scanf("%s", blockInput);
         *blockPointer = strtol(blockInput, &endPointer, 10);
+        long blockVal = *blockPointer;
+        long sizeVal = *sizePointer;
         if (*blockPointer == 0 || *blockPointer < 0) {
-            printf("Invalid input, please try again.");
+            printf("Invalid input, please try again.\n");
+            *blockPointer = -1;
         }
         else if (*blockPointer > *sizePointer) {
-            printf("Not enough memory for a blockTable of that size, please try again.");
+            printf("Not enough memory for a block of that size, please try again.\n");
+            *blockPointer = -1;
         }
-        else if (*blockPointer % *sizePointer != 0) {
-            printf("Invalid size: Sum of all blocks must equal system size.");
-            printf("Please enter a blockTable size that the system size is perfectly divisible by.");
+        else if (*sizePointer % *blockPointer != 0) {
+            printf("TEST: %ld\n%ld\n", *blockPointer, *sizePointer);
+            printf("Invalid size: Sum of all blocks must equal system size.\n");
+            printf("Please enter a block size that the system size is perfectly divisible by.\n");
+            *blockPointer = -1;
         }
+         free(blockInput);
     }
 
 }
@@ -73,18 +82,18 @@ void startUp(long *sizePointer, long *blockPointer) {
  * Gives the user a selection of actions to choose from, parses and validates their input, then
  * executes the command indicated by a valid input option.
  */
-void getInput() {
+void getInput(BlockTable* bTable, Directory* directory) {
     char userInput[10];
     long inputValue = 0;
     char *endPointer;
 
     // Input validation.
     while (inputValue < 1 || inputValue > 4) {
-        printf("Would you like to: ");
-        printf("Add a file? Enter 1");
-        printf("Delete a file? Enter 2");
-        printf("Print values? Enter 3");
-        printf("Quit? Enter 4");
+        printf("Would you like to: \n");
+        printf("Add a file? Enter 1\n");
+        printf("Delete a file? Enter 2\n");
+        printf("Print values? Enter 3\n");
+        printf("Quit? Enter 4\n");
         scanf("%s", userInput);
         inputValue = strtol(userInput, &endPointer, 10);
         if (inputValue < 1 || inputValue > 4) {
@@ -94,13 +103,14 @@ void getInput() {
 
     // Launch the command corresponding to the user input.
     switch (inputValue) {
-        case 1: // Add a file to the system.
-
-        case 2: // Delete a file from the system.
-
+        case 1:
+            addFile(bTable, directory);
+            break;
+        case 2:
+            break;
         case 3: // Print the contents of memory.
-
-        case 4: // Quit the program.
+            break;
+        case 4:
             printf("Exiting...");
             exit(0);
         default:
@@ -131,11 +141,15 @@ void addFile(BlockTable* table, Directory* directory) {
     // Received values from user, add file to the system.
     newFileIndex = checkForSpace(table, fileSize);
     if (newFileIndex < 0) {  // Not enough space for the new file.
-        printf("Not enough memory to add this file.");
+        printf("Not enough memory to add this file.\n");
     } else {  // There is enough space, add the file to the system.
-        // TODO: Add functionality to updateTable so it can be called once and update multiple blocks.
-        // TODO: Add file to directory, add file to block table.
+        int blocksNeeded = (fileSize / table->blockSize) + 1;
+        Entry newEntry = createEntry(fileName, fileSize, newFileIndex, blocksNeeded);
+        updateTable(table, newFileIndex, fileSize);
+        addToDirectory(directory, newEntry);
+        printf("File added.\n\n");
     }
+
 }
 
 
@@ -169,10 +183,10 @@ int checkForSpace(BlockTable* bTable, int fileSize) {
     foundSpaceFlag = 0;
     newFileIndex = -1;
     for (i = 0; i < bTable->length; i++) {
-        if ( (bTable->table)->inUse == 0 ) {    // Blocks have member field 'inUse' with arithmetic boolean values.
+        if ( (bTable->table + (sizeof(Block) * i))->inUse == 0 ) {    // Blocks have member field 'inUse' with arithmetic boolean values.
             blockCounter++;
             if (blockCounter == blocksNeeded) {  // Branch here if we found enough space for the file.
-                newFileIndex = i - blocksNeeded;
+                newFileIndex = (i + 1) - blocksNeeded;
                 foundSpaceFlag = 1;  // Set flag to binary true.
                 break;
             }

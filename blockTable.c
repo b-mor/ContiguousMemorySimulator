@@ -31,15 +31,15 @@ Block createBlock(int size) {
  * @param block The Block object being modified.
  * @param newUsed The amount of space the Block object is now using.
  */
-void updateBlock(Block block, int newUsed) {
-    block.used = newUsed;
-    block.fragmented = block.size - newUsed;
+void updateBlock(Block* block, int newUsed) {
+    block->used = newUsed;
+    block->fragmented = block->size - newUsed;
 
     // Update inUse member field. If it is using space, make it true for inUse.
     // If the blockTable is now using none of its memory, reset it to default values.
-    if (block.inUse == 0) {
-        block.inUse = 1;
-    } else if (block.inUse == 1 && block.used == 0) {
+    if (block->inUse == 0) {
+        block->inUse = 1;
+    } else if (block->inUse == 1 && block->used == 0) {
         resetBlock(block);
     }
 }
@@ -50,22 +50,10 @@ void updateBlock(Block block, int newUsed) {
  *
  * @param block The Block to be reset.
  */
-void resetBlock(Block block) {
-    block.used = 0;
-    block.fragmented = 0;
-    block.fragmented = 0;
-}
-
-
-/**
- * Checks whether or not a specific block is currently being used for system storage.
- *
- * @param block The Block being checked.
- * @return 0 (false) is Block is not in use, 1 (true) if it is.
- */
-int isBlockInUse(Block block) {
-    return block.inUse;
-
+void resetBlock(Block* block) {
+    block->used = 0;
+    block->fragmented = 0;
+    block->fragmented = 0;
 }
 
 
@@ -84,6 +72,12 @@ BlockTable createBlockTable(int blockSize, int length) {
     newTable.length = length;
     newTable.table = malloc(sizeof(struct blockTable) * length);
 
+    int i;
+    for (i = 0; i < length; i ++) {
+        Block b = createBlock(blockSize);
+        *(newTable.table + (sizeof(Block) * i)) = b;
+    }
+
     return newTable;
 }
 
@@ -100,15 +94,37 @@ void destroyBlockTable(BlockTable* bTable) {
 
 /**
  * Updates the Block at the specified index within a BlockTable to use a new amount of memory.
+ * If the size of the file is greater than one individual block, the update multiple blocks until the
+ * BlockTable is fully updated, starting at the given index.
+ *
+ * NO BOUNDS CHECKING IS PERFORMED FOR THE UPDATE! It is the function caller's responsibility to check
+ * for adequate space to store a file before calling this function. Space checking logic is handled by
+ * checkForSpace() in the driver.c file before calling this function.
  *
  * @param bTable The BlockTable being updated.
  * @param index The index of the Block to be updated.
  * @param sizeUsed The new amount of space the Block will now be using.
  */
 void updateTable(BlockTable* bTable, int index, int sizeUsed) {
-    Block block = *(bTable->table + (sizeof(Block) * index));
-    updateBlock(block, sizeUsed);
-
+    if (index > bTable->length || index < 0) {
+        printf("Out of bounds: Block Table not updated.");
+    } else {
+        int blockSize = bTable->blockSize;
+        if (sizeUsed < blockSize) {  // If size needed can fit in one block, just update that one.
+            updateBlock((bTable->table + (sizeof(Block) * index)), sizeUsed);
+        } else {  // If more than one block is needed to store the file, loop and update multiple blocks as needed.
+            int i;
+            int numBlocks = (sizeUsed / blockSize) + 1;  // Total number of blocks needed to store the file.
+            for (i = 0; i < numBlocks; i++) {
+                if (sizeUsed > blockSize) {  // Happens while we are filling blocks to max capacity
+                    updateBlock((bTable->table + (sizeof(Block) * (index + i))), blockSize);
+                    sizeUsed -= blockSize;
+                } else {  // Last update of the loop, update the final block with the remainder memory.
+                    updateBlock((bTable->table + (sizeof(Block) * (index + i))), sizeUsed);
+                }
+            }
+        }
+    }
 }
 
 
@@ -121,7 +137,7 @@ void clearTable(BlockTable* bTable) {
     int i;
     // Reset the Block at every index of the BlockTable provided.
     for (i = 0; i < bTable->length; i++) {
-        resetBlock(*(bTable->table + (sizeof(Block) * i)));
+        resetBlock((bTable->table + (sizeof(Block) * i)));
     }
 
 }

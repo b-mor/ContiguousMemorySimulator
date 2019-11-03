@@ -30,9 +30,8 @@ struct blockTable {
 
 /* Block functions. */
 Block createBlock(int size);
-void updateBlock(Block block, int newUsed);
-void resetBlock(Block block);
-int isBlockInUse(Block block);
+void updateBlock(Block* block, int newUsed);
+void resetBlock(Block* block);
 
 /* BlockTable functions. */
 BlockTable createBlockTable(int blockSize, int length);
