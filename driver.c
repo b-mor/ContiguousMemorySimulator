@@ -7,7 +7,8 @@ void startUp(long *sizePointer, long *blockPointer);
 void getInput(BlockTable* table, Directory* directory);
 void addFile(BlockTable* table, Directory* directory);
 int checkForSpace(BlockTable* bTable, int fileSize);
-
+void printSystem(BlockTable* table, Directory* directory);
+void deleteFile(BlockTable* table, Directory* directory);
 int main() {
 
     long* systemSizePtr = malloc(sizeof(long));
@@ -107,8 +108,10 @@ void getInput(BlockTable* bTable, Directory* directory) {
             addFile(bTable, directory);
             break;
         case 2:
+            deleteFile(bTable, directory);
             break;
         case 3: // Print the contents of memory.
+            printSystem(bTable, directory);
             break;
         case 4:
             printf("Exiting...");
@@ -141,9 +144,15 @@ void addFile(BlockTable* table, Directory* directory) {
     // Received values from user, add file to the system.
     newFileIndex = checkForSpace(table, fileSize);
     if (newFileIndex < 0) {  // Not enough space for the new file.
-        printf("Not enough memory to add this file.\n");
+        printf("Not enough memory to add this file.\n\n");
     } else {  // There is enough space, add the file to the system.
-        int blocksNeeded = (fileSize / table->blockSize) + 1;
+        int blocksNeeded;
+        if (fileSize % table->blockSize != 0) {
+            blocksNeeded = (fileSize / table->blockSize) + 1;
+        } else {
+            blocksNeeded = (fileSize / table->blockSize);
+        }
+        printf("Blocks needed: %d", blocksNeeded);
         Entry newEntry = createEntry(fileName, fileSize, newFileIndex, blocksNeeded);
         updateTable(table, newFileIndex, fileSize);
         addToDirectory(directory, newEntry);
@@ -168,7 +177,7 @@ int checkForSpace(BlockTable* bTable, int fileSize) {
     blockSize = bTable->blockSize;
 
     // Determine how many blocks of memory the new file will need.
-    if (fileSize < blockSize) {
+    if (fileSize <= blockSize) {
         blocksNeeded = 1;
     } else if (fileSize % blockSize == 0) {
         blocksNeeded = fileSize / blockSize;
@@ -203,4 +212,36 @@ int checkForSpace(BlockTable* bTable, int fileSize) {
     }
 
     return result;
+}
+
+void deleteFile(BlockTable* table, Directory* directory) {
+    char fileName[64];
+    printf("Deleting - Enter the file name: ");
+    scanf("%s", fileName);
+    int blockLength, blockStart, i;
+    int fileIndex = findEntryInDirectory(directory, fileName);
+    if (fileIndex >= 0) {  // Branch here if an Entry matching the fileName was found.
+        blockLength = (directory->list + (sizeof(Entry) * fileIndex))->length;
+        blockStart = (directory->list + (sizeof(Entry) * fileIndex))->start;
+        // Iterate over and reset BlockTable elements belonging to the deleted file.
+        for (i = 0; i < blockLength; i++) {
+            resetBlock((table->table + (sizeof(Block) * (i + blockStart))));
+        }
+
+        // Remove the Entry from the Directory.
+        deleteFromDirectory(directory, fileIndex);
+
+        printf("File successfully deleted.\n\n");
+    } else {
+        printf("No such file was found in the system.\n");
+    }
+
+}
+
+void printSystem(BlockTable* table, Directory* directory) {
+    printf("-------------------------------------------\n");
+    printDirectory(directory);
+    printf("-------------------------------------------\n");
+    printTable(table);
+    printf("-------------------------------------------\n\n");
 }

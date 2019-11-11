@@ -63,6 +63,9 @@ void deleteFromDirectory(Directory* d, int index) {
     copyFlag = 0;
     entrySize = sizeof(Entry);
     for (i = 0; i < d->length; i++) {
+        if (i == index && copyFlag != 1) {
+            copyFlag = 1;
+        }
         // If the copyFlag is true, shift the next Entry size chunk of memory down.
         if (copyFlag == 1) {
             memcpy((d->list + (entrySize * i)), (d->list + (entrySize * (i + 1))), entrySize);
@@ -101,10 +104,31 @@ void printDirectory(Directory* d) {
  */
 Entry createEntry(char *fileName, int size, int start, int length) {
     Entry e;
-    e.fileName = fileName;
+    e.fileName = malloc(sizeof(char) * strlen(fileName));
+    strcpy(e.fileName, fileName);
     e.size = size;
     e.start = start;
     e.length = length;
     return e;
+}
+
+
+/**
+ * Finds the index of a file within a Directory matching the desired file name. Used in conjunction
+ * with deleteFromDirectory() to find desired files when attempting to remove them.
+ *
+ * @param directory The Directory object to be searched.
+ * @param fileName The name of the file in an Entry object to be searched for.
+ * @return The index of the Entry in the Directory object if found, -1 if the Entry is not found.
+ */
+int findEntryInDirectory(Directory* directory, char* fileName) {
+    int i, result;
+    result = -1;  // If no file matching the fileName given is found, return -1.
+    for (i = 0; i < directory->size; i++) {
+        if (strcmp( (directory->list + (sizeof(Entry) * i))->fileName, fileName) == 0) {
+            result = i;  // Found the file, return the index of the file in the directory.
+        }
+    }
+    return result;
 }
 

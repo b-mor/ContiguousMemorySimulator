@@ -27,6 +27,7 @@ void destroyDirectory(Directory* d);
 void addToDirectory(Directory* d, Entry e);
 void deleteFromDirectory(Directory* d, int index);
 Entry createEntry(char *fileName, int size, int start, int length);
+int findEntryInDirectory(Directory* directory, char* fileName);
 void printDirectory(Directory* d);
 
 #endif

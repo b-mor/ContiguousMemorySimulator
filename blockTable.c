@@ -53,7 +53,7 @@ void updateBlock(Block* block, int newUsed) {
 void resetBlock(Block* block) {
     block->used = 0;
     block->fragmented = 0;
-    block->fragmented = 0;
+    block->inUse = 0;
 }
 
 
@@ -114,7 +114,12 @@ void updateTable(BlockTable* bTable, int index, int sizeUsed) {
             updateBlock((bTable->table + (sizeof(Block) * index)), sizeUsed);
         } else {  // If more than one block is needed to store the file, loop and update multiple blocks as needed.
             int i;
-            int numBlocks = (sizeUsed / blockSize) + 1;  // Total number of blocks needed to store the file.
+            int numBlocks;  // Total number of blocks needed to store the file.
+            if (sizeUsed % blockSize != 0) {
+                numBlocks = (sizeUsed / blockSize) + 1;
+            } else {
+                numBlocks = sizeUsed / blockSize;
+            }
             for (i = 0; i < numBlocks; i++) {
                 if (sizeUsed > blockSize) {  // Happens while we are filling blocks to max capacity
                     updateBlock((bTable->table + (sizeof(Block) * (index + i))), blockSize);
@@ -150,10 +155,10 @@ void clearTable(BlockTable* bTable) {
  */
 void printTable(BlockTable* bTable) {
     int i;
-    printf("Block table:");
-    printf("Block number\t\t\tSize used\t\t\tFragmented");
+    printf("Block table:\n");
+    printf("Block number\t\tSize used\t\tFragmented\n");
     for (i = 0; i < bTable->length; i++) {
         Block b = *(bTable->table + (sizeof(Block) * i));
-        printf("%d\t\t\t%d\t\t\t%d\t\t\t%d", i, b.used, b.fragmented);
+        printf("%d\t\t\t\t\t%d\t\t\t\t%d\n", i, b.used, b.fragmented);
     }
 }
