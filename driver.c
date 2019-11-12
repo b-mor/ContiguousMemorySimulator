@@ -1,6 +1,14 @@
 /**
  * driver.c by Brandon Morris
  * Please run this program on Ubuntu 16.04 LTS.
+ * 
+ * Extra credit:
+ * Input validation has been added to all aspects of the program where user input
+ * occurs. Valid numbers must be entered for file sizes, file sizes cannot exceed max
+ * memory space, files won't be added if there isn't enough space in the system, and 
+ * block sizes must be such that the total system size is divisible by the block size
+ * with no remainder. Try and enter bad values at certain points and to my knowledge, 
+ * it won't let you.
  */
 
 #include <stdio.h>
@@ -161,7 +169,6 @@ void addFile(BlockTable* table, Directory* directory) {
         } else {
             blocksNeeded = (fileSize / table->blockSize);
         }
-        printf("Blocks needed: %d", blocksNeeded);
         Entry newEntry = createEntry(fileName, fileSize, newFileIndex, blocksNeeded);
         updateTable(table, newFileIndex, fileSize);
         addToDirectory(directory, newEntry);
