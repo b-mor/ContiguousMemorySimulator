@@ -1,5 +1,5 @@
 //
-// Created by Brandon Morris on 2019-11-01.
+// directory.c by Brandon Morris on 2019-11-01.
 //
 
 #include "directory.h"

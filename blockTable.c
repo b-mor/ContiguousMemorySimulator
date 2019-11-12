@@ -1,5 +1,5 @@
 //
-// Created by Brandon Morris on 2019-10-31.
+// directory.c by Brandon Morris on 2019-10-31.
 //
 #include "blockTable.h"
 #include <stdlib.h>

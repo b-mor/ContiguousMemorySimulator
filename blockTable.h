@@ -1,5 +1,5 @@
 //
-// Created by Brandon Morris on 2019-10-31.
+// blockTable.h by Brandon Morris on 2019-10-31.
 //
 
 #ifndef BLOCK_H

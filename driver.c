@@ -1,3 +1,8 @@
+/**
+ * driver.c by Brandon Morris
+ * Please run this program on Ubuntu 16.04 LTS.
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "directory.h"
@@ -115,9 +120,13 @@ void getInput(BlockTable* bTable, Directory* directory) {
             break;
         case 4:
             printf("Exiting...");
+            destroyDirectory(directory);
+            destroyBlockTable(bTable);
             exit(0);
         default:
             printf("Something has gone wrong. Exiting...");
+            destroyDirectory(directory);
+            destroyBlockTable(bTable);
             exit(1);
     }
 

@@ -1,5 +1,5 @@
 //
-// Created by Brandon Morris on 2019-11-01.
+// directory.h by Brandon Morris on 2019-11-01.
 //
 
 #ifndef DIRECTORY_H
